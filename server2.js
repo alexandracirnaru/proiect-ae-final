@@ -3,7 +3,7 @@ var Sequelize = require("sequelize")
 
 //connect to mysql database
 //baza de date, username, password
-var sequelize = new Sequelize('catalog', 'alexandracirnaru', '1234', {
+var sequelize = new Sequelize('restaurant', 'alexandracirnaru', '1234', {
     dialect:'mysql',
     host:'127.0.0.1'
 })
@@ -20,23 +20,26 @@ var Categories = sequelize.define('categories', {
     description: Sequelize.STRING
 })
 
-var Products = sequelize.define('products', {
-    name: Sequelize.STRING,
+var Food = sequelize.define('food', {
     category_id: Sequelize.INTEGER,
+    name: Sequelize.STRING,
     description: Sequelize.STRING,
     price: Sequelize.INTEGER,
-    image: Sequelize.STRING
+    image: Sequelize.STRING,
+    isMenuOfTheDay: Sequelize.BOOLEAN
 })
 
-var Reviews = sequelize.define('reviews', {
-    product_id: Sequelize.INTEGER,
-    name: Sequelize.STRING,
-    content: Sequelize.STRING,
-    score: Sequelize.INTEGER
+
+
+var ShoppingCartItems= sequelize.define('shoppingCartItems', {
+    food_id: Sequelize.INTEGER,
+    quantity: Sequelize.INTEGER,
+    shoppingCartId: Sequelize.INTEGER
 })
 
-Products.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
-Products.hasMany(Reviews, {foreignKey: 'product_id'});
+Food.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
+
+/*ShoppingCartItems.hasMany(Food, {foreignKey: 'food_id'}); */
 
 var app = express()
 
@@ -67,6 +70,24 @@ async function getCategories(request, response) {
         response.status(500).send('something bad happened')
     }
 }
+
+async function getFood(request, response) {
+    try {
+        let food = await Food.findAll();
+        response.status(200).json(food)
+    } catch(err) {
+        response.status(500).send('something bad happened')
+    }
+}
+
+/*async function getOrders(request, response) {
+    try {
+        let orders = await Orders.findAll();
+        response.status(200).json(orders)
+    } catch(err) {
+        response.status(500).send('something bad happened')
+    }
+} */
 
 // get a list of categories
 app.get('/categories', getCategories)
@@ -115,16 +136,12 @@ app.delete('/categories/:id', function(request, response) {
     })
 })
 
-app.get('/products', function(request, response) {
-    Products.findAll(
+app.get('/food', function(request, response) {
+    Food.findAll(
         {
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
-            }, {
-                model: Reviews,
-                where: { id: Sequelize.col('products.id')},
-                required: false
+                where: { id: Sequelize.col('food.category_id') }
             }]
         }
         
@@ -133,33 +150,31 @@ app.get('/products', function(request, response) {
                 response.status(200).send(products)
             }
         )
-})
+}) 
 
-app.get('/products/:id', function(request, response) {
-    Products.findByPk(request.params.id, {
+//app.get('/food', getFood)
+
+app.get('/food/:id', function(request, response) {
+    Food.findByPk(request.params.id, {
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
-            }, {
-                model: Reviews,
-                where: { id: Sequelize.col('products.id')},
-                required: false
+                where: { id: Sequelize.col('food.category_id') }
             }]
         }).then(
             function(product) {
                 response.status(200).send(product)
             }
         )
-})
+}) 
 
-app.post('/products', function(request, response) {
-    Products.create(request.body).then(function(product) {
+app.post('/food', function(request, response) {
+    Food.create(request.body).then(function(product) {
         response.status(201).send(product)
     })
 })
 
-app.put('/products/:id', function(request, response) {
-    Products.findByPk(request.params.id).then(function(product) {
+app.put('/food/:id', function(request, response) {
+    Food.findByPk(request.params.id).then(function(product) {
         if(product) {
             product.update(request.body).then(function(product){
                 response.status(201).send(product)
@@ -172,8 +187,8 @@ app.put('/products/:id', function(request, response) {
     })
 })
 
-app.delete('/products/:id', function(request, response) {
-    Products.findByPk(request.params.id).then(function(product) {
+app.delete('/food/:id', function(request, response) {
+    Food.findByPk(request.params.id).then(function(product) {
         if(product) {
             product.destroy().then(function(){
                 response.status(204).send()
@@ -184,17 +199,13 @@ app.delete('/products/:id', function(request, response) {
     })
 })
 
-app.get('/categories/:id/products', function(request, response) {
-    Products.findAll({
+app.get('/categories/:id/food', function(request, response) {
+    Food.findAll({
             where:{category_id: request.params.id},
             
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
-            }, {
-                model: Reviews,
-                where: { id: Sequelize.col('products.id')},
-                required: false
+                where: { id: Sequelize.col('food.category_id') }
             }]
         }
             ).then(
@@ -203,6 +214,7 @@ app.get('/categories/:id/products', function(request, response) {
             }
         )
 })
+
 
 app.get('/reviews', function(request, response) {
 

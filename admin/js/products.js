@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 // READ records
 function readRecords() {
-    $.get("/products/", {}, function (data, status) {
+    $.get("/food/", {}, function (data, status) {
         data.forEach(function(value) {
             var row = '<tr id="row_id_'+ value.id +'">'
             			+ displayColumns(value)
@@ -19,9 +19,13 @@ function readRecords() {
 
 function displayColumns(value) {
     return 	'<td>'+value.id+'</td>'
-            + '<td class="category_id">'+ (value.category ? value.category.name : value.category_id) +'</td>'
+            + '<td class="category_id">'+ value.category_id +'</td>'
             + '<td class="name">'+value.name+'</td>'
 			+ '<td class="description">'+value.description+'</td>'
+			+ '<td class="price">'+value.price+'</td>'
+			+ '<td class="isMenuOfTheDay">'+value.isMenuOfTheDay+'</td>'
+			+ '<td class="image">'+value.image+'</td>'
+					
 			+ '<td align="center">'
 			+	'<button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button>'
 			+ '</td>'
@@ -35,12 +39,15 @@ function addRecord() {
     $('#category_id').val('');
     $('#name').val('');
     $('#description').val('');
+    $('#price').val('');
+    $('#isMenuOfTheDay').val('');
+    $('#image').val('');
     
     $('#myModalLabel').html('Add New Product');
 }
 
 function viewRecord(id) {
-    var url = "/products/" + id;
+    var url = "/food/" + id;
     
     $.get(url, {}, function (data, status) {
         //bind the values to the form fields
@@ -48,6 +55,8 @@ function viewRecord(id) {
         $('#name').val(data.name);
         $('#description').val(data.description);
         $('#price').val(data.price);
+        $('#isMenuOfTheDay').val(data.isMenuOfTheDay);
+        $('#image').val(data.image);
         $('#id').val(id);
         $('#myModalLabel').html('Edit Product');
         
@@ -69,7 +78,7 @@ function saveRecord() {
 
 function createRecord(formData) {
     $.ajax({
-        url: '/products/',
+        url: '/food/',
         type: 'POST',
         accepts: {
             json: 'application/json'
@@ -88,7 +97,7 @@ function createRecord(formData) {
 
 function updateRecord(formData) {
     $.ajax({
-        url: '/products/'+formData.id,
+        url: '/food/'+formData.id,
         type: 'PUT',
         accepts: {
             json: 'application/json'
@@ -98,6 +107,9 @@ function updateRecord(formData) {
             $('#row_id_'+formData.id+'>td.category_id').html(formData.category_id);
             $('#row_id_'+formData.id+'>td.name').html(formData.name);
             $('#row_id_'+formData.id+'>td.description').html(formData.description);
+            $('#row_id_'+formData.id+'>td.price').html(formData.price);
+            $('#row_id_'+formData.id+'>td.isMenuOfTheDay').html(formData.isMenuOfTheDay);
+            $('#row_id_'+formData.id+'>td.image').html(formData.image);
             $('#add_new_record_modal').modal('hide');
         } 
     });
@@ -105,7 +117,7 @@ function updateRecord(formData) {
 
 function deleteRecord(id) {
     $.ajax({
-        url: '/products/'+id,
+        url: '/food/'+id,
         type: 'DELETE',
         success: function(data) {
             $('#row_id_'+id).remove();

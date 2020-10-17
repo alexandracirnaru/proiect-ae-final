@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <title>Contact</title>
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+<div id="container">
+	<header>
+        <section id="logo">
+            <h1>
+                Contacteaza-ne
+            </h1>
+        </section>
+    </header>
+<div id="after_submit"></div>
+<form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
+  <div class="row">
+    <label class="required" for="name">Numele:</label><br />
+    <input id="name" class="input" name="name" type="text" value="" size="30" /><br />
+    <span id="name_validation" class="error_message"></span>
+  </div>
+  <div class="row">
+    <label class="required" for="email">Email-ul:</label><br />
+    <input id="email" class="input" name="email" type="text" value="" size="30" /><br />
+    <span id="email_validation" class="error_message"></span>
+  </div>
+  <div class="row">
+    <label class="required" for="message">Mesajul dumneavoastra:</label><br />
+    <textarea id="message" class="input" name="message" rows="7" cols="30"></textarea><br />
+    <span id="message_validation" class="error_message"></span>
+  </div>
+    
+    <input id="submit_button" type="submit" value="Trimite" />
+</form>
+</body>
+</html>

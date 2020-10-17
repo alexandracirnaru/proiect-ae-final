@@ -2,21 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Catalog Admin - Products</title>
+    <title>Admin - Products</title>
     
     <!-- Jquery JS file -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
     <!-- Bootstrap CSS File  -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+   <link rel="stylesheet" href="css/style.css">
+
     <!-- Bootstrap JS file -->
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     
     
     <!-- Custom JS file -->
     <script type="text/javascript" src="js/serialize.js"></script>
     <script type="text/javascript" src="js/products.js"></script>
+    
+ 
 </head>
 <body>
 
@@ -30,7 +34,7 @@
     <ul class="nav nav-tabs">
       <li role="presentation"><a href="/admin/">Home</a></li>
       <li role="presentation"><a href="categories.html">Categorii</a></li>
-      <li role="presentation" class="active"><a href="products.html">Produse</a></li>
+      <li role="presentation"><a href="products.html">Meniu</a></li>
     </ul>
     <br/>
     <div class="row">
@@ -44,18 +48,21 @@
         <div class="col-md-12">
             <div class="records_content">
                 <br/>
-                <h3>Produse</h3>
-                <table id="articles" class="table table-bordered table-striped">
+                <h3>Meniu</h3>
+                <table id="articles" class="table table-hover table-dark">
 						<tr>
 							<th>ID.</th>
-							<th>Category Name</th>
+							<th>Categorie</th>
 							<th>Nume</th>
 							<th>Descriere</th>
+							<th>Pret</th>
+							<th>Este in meniul zilei?</th>
+							<th>Url imagine</th>
 							<th>Update</th>
-							<th>Exclude</th>
+							<th>Delete</th>
 						</tr>
             		</tr>
-				</<table>
+				<table>
             </div>
         </div>
     </div>
@@ -79,6 +86,7 @@
                         <label for="name">ID Categorie</label>
                         <input type="text" name="category_id" id="category_id" placeholder="ID Categorie" class="form-control"/>
                     </div>
+                   
                     <div class="form-group">
                         <label for="name">Nume</label>
                         <input type="text" name="name" id="name" placeholder="Nume" class="form-control"/>
@@ -88,14 +96,24 @@
                         <textarea name="description" id="description" placeholder="Descriere" rows="5" class="form-control"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="name">Pret</label>
-                        <input type="text" name="price" id="price" placeholder="Nume" class="form-control"/>
+                        <label for="abstract">Pret</label>
+                        <textarea name="price" id="price" placeholder="Pret" rows="5" class="form-control"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="myCheck">Este in meniul zilei?</label>
+                        <input  name="isMenuOfTheDay" id="isMenuOfTheDay" placeholder="Meniul zilei" rows="5" class="form-control"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="abstract">Url imagine</label>
+                        <textarea name="image" id="image" placeholder="Url imagine" rows="5" class="form-control"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveRecord()">Save Record</button>
+                <button type="button" class="btn buy-now-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn buy-now-btn" onclick="saveRecord()">Save Record</button>
             </div>
         </div>
     </div>
